@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Koln Laviste — Full Stack Developer",
   description:
-    "I'm Koln, a full-stack developer from Cebu City, Philippines. I build modern web and mobile applications with a focus on clean code and great user experience.",
+    "I'm Koln, a full-stack developer from Cebu City, Philippines. I build modern web applications with a focus on clean code and great user experience.",
   keywords: [
     "Full Stack Developer",
     "Web Developer",
