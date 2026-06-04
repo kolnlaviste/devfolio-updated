@@ -3,75 +3,119 @@
 import { motion } from "framer-motion";
 import { skillsData } from "@/lib/data";
 
+const fadeUp = {
+  hidden: { opacity: 0, y: 20 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, delay: i * 0.07, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] },
+  }),
+};
+
 export default function Skills() {
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.6 },
-    },
-  };
-
   return (
-    <section id="skills" className="py-20 relative">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6">
-        <motion.div variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-          <motion.div variants={itemVariants} className="mb-16">
-            <p className="text-xs tracking-widest uppercase text-stone-500 dark:text-stone-500 font-semibold">
-              Skills
-            </p>
-            <h2 className="text-4xl sm:text-5xl font-black text-stone-900 dark:text-[#f0f0f0] mt-2">
-              What I Work With
-            </h2>
-          </motion.div>
+    <section id="skills" className="relative">
+      <div className="max-w-[1200px] mx-auto px-14 py-28">
+        {/* Header */}
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.55 }}
+          className="text-[0.68rem] tracking-[0.18em] uppercase font-medium mb-3"
+          style={{ color: "var(--ac)" }}
+        >
+          Expertise
+        </motion.p>
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.55, delay: 0.08 }}
+          className="tracking-[-0.025em] leading-[1.1]"
+          style={{
+            fontFamily: "var(--font-space-grotesk)",
+            fontSize: "clamp(2rem, 4vw, 2.75rem)",
+            fontWeight: 600,
+            color: "var(--tx)",
+          }}
+        >
+          What I Work With
+        </motion.h2>
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.4, delay: 0.18 }}
+          className="w-12 h-0.5 rounded-full mt-6 mb-14"
+          style={{ background: "var(--ac)" }}
+        />
 
-          <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
-            {Object.entries(skillsData).map(([key, category]) => {
-              const Icon = category.icon;
-              return (
-                <motion.div
-                  key={key}
-                  variants={itemVariants}
-                  className="p-6 bg-white dark:bg-[#1c1c1c] border border-stone-200 dark:border-[#404040] rounded-xl transition-colors"
-                >
-                  <div className="flex items-center gap-3 mb-6">
-                    <Icon className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
-                    <h3 className="text-lg font-bold text-stone-900 dark:text-[#f0f0f0]">
-                      {category.name}
-                    </h3>
-                  </div>
+        {/* Grid */}
+        <div
+          className="grid gap-6"
+          style={{ gridTemplateColumns: "repeat(auto-fill, minmax(270px, 1fr))" }}
+        >
+          {Object.entries(skillsData).map(([key, category], idx) => (
+            <motion.div
+              key={key}
+              custom={idx}
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              className="p-6 rounded-xl transition-all duration-200"
+              style={{
+                background: "var(--sf)",
+                border: "1px solid var(--bd)",
+              }}
+              onMouseEnter={(e) =>
+                ((e.currentTarget as HTMLDivElement).style.borderColor =
+                  "oklch(66% 0.21 282 / 0.4)")
+              }
+              onMouseLeave={(e) =>
+                ((e.currentTarget as HTMLDivElement).style.borderColor = "var(--bd)")
+              }
+            >
+              {/* Category label */}
+              <p
+                className="text-[0.65rem] tracking-[0.15em] uppercase mb-5"
+                style={{ color: "var(--ac)" }}
+              >
+                {category.name}
+              </p>
 
-                  <div className="flex flex-wrap gap-2">
-                    {category.skills.map((skill) => {
-                      const SkillIcon = skill.lucideIcon;
-                      return (
-                        <motion.div
-                          key={skill.name}
-                          whileHover={{ scale: 1.05 }}
-                          className="px-3 py-1.5 bg-stone-100 dark:bg-[#2a2a2a] text-stone-700 dark:text-[#f0f0f0] text-sm font-medium rounded-full flex items-center gap-1.5 hover:bg-indigo-50 dark:hover:bg-indigo-900/40 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors cursor-default"
-                        >
-                          <SkillIcon className="w-3.5 h-3.5" />
-                          {skill.name}
-                        </motion.div>
-                      );
-                    })}
-                  </div>
-                </motion.div>
-              );
-            })}
-          </div>
-        </motion.div>
+              {/* Skill pills */}
+              <div className="flex flex-wrap gap-1.5">
+                {category.skills.map((skill) => (
+                  <span
+                    key={skill.name}
+                    className="px-3 py-1.5 rounded-md text-[0.8125rem] transition-all duration-200 cursor-default"
+                    style={{
+                      border: "1px solid var(--bd)",
+                      background: "var(--sf2)",
+                      color: "var(--tx2)",
+                    }}
+                    onMouseEnter={(e) => {
+                      const el = e.currentTarget as HTMLSpanElement;
+                      el.style.borderColor = "var(--ac)";
+                      el.style.background = "var(--glow)";
+                      el.style.color = "var(--tx)";
+                    }}
+                    onMouseLeave={(e) => {
+                      const el = e.currentTarget as HTMLSpanElement;
+                      el.style.borderColor = "var(--bd)";
+                      el.style.background = "var(--sf2)";
+                      el.style.color = "var(--tx2)";
+                    }}
+                  >
+                    {skill.name}
+                  </span>
+                ))}
+              </div>
+            </motion.div>
+          ))}
+        </div>
       </div>
     </section>
   );

@@ -286,7 +286,7 @@ export const bioData = {
   linkedin: "https://www.linkedin.com/in/koln-laviste",
   bio: [
     "I'm Koln, a full-stack developer from Cebu City, Philippines. I build modern web and mobile applications — Next.js frontends, FastAPI backends, and Flutter apps — with a focus on clean code and great user experience.",
-    "Currently freelancing at Coolmogo, building AI-integrated production systems with Pydantic AI and SurrealDB. I care about the why behind the code—I follow Git best practices religiously, break complex problems into small pieces, and always reach for the official docs first.",
+    "Currently a full-time developer at Coolmogo, building AI-integrated production systems with Pydantic AI and SurrealDB. I care about the why behind the code—I follow Git best practices religiously, break complex problems into small pieces, and always reach for the official docs first.",
   ],
   availability: "Open to part-time opportunities",
   status: "Available",

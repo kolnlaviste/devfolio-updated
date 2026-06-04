@@ -15,101 +15,131 @@ const navLinks = [
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState("hero");
+  const [scrolled, setScrolled] = useState(false);
   const { isDark, toggle } = useTheme();
 
   useEffect(() => {
-    const handleScroll = () => {
-      const sections = ["hero", "about", "projects", "skills", "experience", "contact"];
-      const current = sections.find((section) => {
-        const element = document.getElementById(section);
-        if (!element) return false;
-        const rect = element.getBoundingClientRect();
-        return rect.top <= 100 && rect.bottom > 100;
-      });
-      if (current) setActiveSection(current);
-    };
-
+    const handleScroll = () => setScrolled(window.scrollY > 30);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white/85 dark:bg-[#1c1c1c]/95 backdrop-blur-md border-b border-stone-200 dark:border-[#404040] transition-colors">
-      <div className="mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          {/* Logo */}
-          <Link href="#" className="text-lg font-black bg-gradient-to-r from-stone-900 dark:from-[#f0f0f0] to-indigo-600 dark:to-indigo-400 bg-clip-text text-transparent">
-            KL
-          </Link>
+    <header
+      className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
+      style={
+        scrolled
+          ? {
+              background: "color-mix(in srgb, var(--bg) 88%, transparent)",
+              borderBottom: "1px solid var(--bd)",
+              backdropFilter: "blur(18px)",
+            }
+          : {}
+      }
+    >
+      <div className="max-w-[1200px] mx-auto px-14 flex items-center justify-between h-[68px]">
+        {/* Logo */}
+        <Link
+          href="#"
+          className="text-[1.125rem] font-bold tracking-tight"
+          style={{ fontFamily: "var(--font-space-grotesk)", color: "var(--tx)" }}
+        >
+          KL
+        </Link>
 
-          {/* Desktop Nav */}
-          <nav className="hidden md:flex gap-8">
-            {navLinks.map((link) => {
-              const sectionId = link.href.slice(1);
-              const isActive = activeSection === sectionId;
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={`text-sm transition-colors relative ${
-                    isActive
-                      ? "text-indigo-600 dark:text-indigo-400 font-semibold"
-                      : "text-stone-600 dark:text-stone-400 hover:text-indigo-600 dark:hover:text-indigo-400"
-                  }`}
-                >
-                  {link.label}
-                  {isActive && (
-                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-indigo-600 dark:bg-indigo-400" />
-                  )}
-                </Link>
-              );
-            })}
-          </nav>
-
-          {/* Right Side - Theme Toggle + Mobile Menu */}
-          <div className="flex items-center gap-4">
-            <button
-              onClick={toggle}
-              className="p-2 text-stone-700 dark:text-[#f0f0f0] hover:bg-stone-100 dark:hover:bg-[#2a2a2a] rounded-lg transition-colors"
-              aria-label="Toggle theme"
+        {/* Desktop Nav */}
+        <nav className="hidden md:flex gap-9">
+          {navLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="text-[0.8rem] tracking-[0.06em] uppercase transition-colors duration-200"
+              style={{ color: "var(--tx2)" }}
+              onMouseEnter={(e) =>
+                ((e.currentTarget as HTMLAnchorElement).style.color = "var(--tx)")
+              }
+              onMouseLeave={(e) =>
+                ((e.currentTarget as HTMLAnchorElement).style.color = "var(--tx2)")
+              }
             >
-              {isDark ? <Sun size={20} /> : <Moon size={20} />}
-            </button>
+              {link.label}
+            </Link>
+          ))}
+        </nav>
 
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden p-2 text-stone-700 dark:text-[#f0f0f0] hover:bg-stone-100 dark:hover:bg-[#2a2a2a] rounded-lg transition-colors"
-            >
-              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
-          </div>
+        {/* Right side */}
+        <div className="flex items-center gap-3">
+          <a
+            href="/assets/resume.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden md:inline-flex px-5 py-2 rounded-md text-[0.8rem] tracking-[0.05em] uppercase transition-all duration-200"
+            style={{
+              border: "1px solid var(--bd)",
+              color: "var(--tx2)",
+              fontFamily: "var(--font-dm-sans)",
+            }}
+            onMouseEnter={(e) => {
+              const el = e.currentTarget as HTMLAnchorElement;
+              el.style.borderColor = "var(--ac)";
+              el.style.color = "var(--ac)";
+            }}
+            onMouseLeave={(e) => {
+              const el = e.currentTarget as HTMLAnchorElement;
+              el.style.borderColor = "var(--bd)";
+              el.style.color = "var(--tx2)";
+            }}
+          >
+            Resume
+          </a>
+
+          <button
+            onClick={toggle}
+            className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200"
+            style={{ border: "1px solid var(--bd)", color: "var(--tx2)", background: "transparent" }}
+            aria-label="Toggle theme"
+          >
+            {isDark ? <Sun size={15} /> : <Moon size={15} />}
+          </button>
+
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="md:hidden w-8 h-8 flex items-center justify-center rounded-full transition-colors"
+            style={{ color: "var(--tx2)" }}
+          >
+            {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
         </div>
-
-        {/* Mobile Nav */}
-        {isMenuOpen && (
-          <nav className="md:hidden pb-4 space-y-2 border-t border-stone-200 dark:border-[#404040] pt-4">
-            {navLinks.map((link) => {
-              const sectionId = link.href.slice(1);
-              const isActive = activeSection === sectionId;
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={`block px-4 py-2 rounded-lg transition-colors ${
-                    isActive
-                      ? "bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 font-semibold"
-                      : "text-stone-700 dark:text-[#f0f0f0] hover:bg-stone-100 dark:hover:bg-[#2a2a2a]"
-                  }`}
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {link.label}
-                </Link>
-              );
-            })}
-          </nav>
-        )}
       </div>
+
+      {/* Mobile Nav */}
+      {isMenuOpen && (
+        <nav
+          className="md:hidden px-6 pb-5 pt-3 flex flex-col gap-4"
+          style={{ borderTop: "1px solid var(--bd)", background: "var(--bg)" }}
+        >
+          {navLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="text-sm tracking-[0.08em] uppercase"
+              style={{ color: "var(--tx2)" }}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              {link.label}
+            </Link>
+          ))}
+          <a
+            href="/assets/resume.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm tracking-[0.06em] uppercase"
+            style={{ color: "var(--ac)" }}
+          >
+            Resume ↗
+          </a>
+        </nav>
+      )}
     </header>
   );
 }

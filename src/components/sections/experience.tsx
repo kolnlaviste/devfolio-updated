@@ -3,103 +3,136 @@
 import { motion } from "framer-motion";
 import { experienceData } from "@/lib/data";
 
+const fadeUp = {
+  hidden: { opacity: 0, y: 20 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.55, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] },
+  }),
+};
+
 export default function Experience() {
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, x: -20 },
-    visible: {
-      opacity: 1,
-      x: 0,
-      transition: { duration: 0.6 },
-    },
-  };
-
   return (
-    <section id="experience" className="py-20 relative">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6">
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
+    <section id="experience" className="relative">
+      <div className="max-w-[1200px] mx-auto px-14 py-28">
+        {/* Header */}
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
+          transition={{ duration: 0.55 }}
+          className="text-[0.68rem] tracking-[0.18em] uppercase font-medium mb-3"
+          style={{ color: "var(--ac)" }}
         >
-          <motion.div variants={itemVariants} className="mb-16">
-            <p className="text-xs tracking-widest uppercase text-stone-500 dark:text-stone-500 font-semibold">
-              Experience
-            </p>
-            <h2 className="text-4xl sm:text-5xl font-black text-stone-900 dark:text-[#f0f0f0] mt-2">
-              Work History
-            </h2>
-          </motion.div>
+          Career
+        </motion.p>
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.55, delay: 0.08 }}
+          className="tracking-[-0.025em] leading-[1.1]"
+          style={{
+            fontFamily: "var(--font-space-grotesk)",
+            fontSize: "clamp(2rem, 4vw, 2.75rem)",
+            fontWeight: 600,
+            color: "var(--tx)",
+          }}
+        >
+          Work History
+        </motion.h2>
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.4, delay: 0.18 }}
+          className="w-12 h-0.5 rounded-full mt-6 mb-14"
+          style={{ background: "var(--ac)" }}
+        />
 
-          {/* Timeline */}
-          <div className="space-y-8">
-            {experienceData.map((exp, idx) => (
-              <motion.div
-                key={idx}
-                variants={itemVariants}
-                className="relative pl-8 border-l-2 border-indigo-200 dark:border-indigo-800"
-              >
-                {/* Timeline Dot */}
-                <div className="absolute -left-3 top-1 w-4 h-4 bg-indigo-600 dark:bg-indigo-400 border-4 border-white dark:border-[#0a0a0a] rounded-full transition-colors" />
+        {/* Experience rows */}
+        <div className="flex flex-col">
+          {experienceData.map((exp, idx) => (
+            <motion.div
+              key={idx}
+              custom={idx}
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              className="grid gap-12 py-10 md:grid-cols-[200px_1fr]"
+              style={{ borderTop: "1px solid var(--bd)" }}
+            >
+              {/* Left: company / date */}
+              <div>
+                <p
+                  className="text-[0.9375rem] font-semibold mb-1"
+                  style={{ fontFamily: "var(--font-space-grotesk)", color: "var(--tx)" }}
+                >
+                  {exp.company}
+                </p>
+                <p className="text-[0.8rem] mb-3" style={{ color: "var(--tx2)" }}>
+                  {exp.period}
+                </p>
+                <span
+                  className="inline-block px-2.5 py-1 rounded text-[0.65rem] tracking-[0.1em] uppercase"
+                  style={{ border: "1px solid var(--bd)", color: "var(--tx3)" }}
+                >
+                  {exp.employment}
+                </span>
+              </div>
 
-                <div className="bg-white dark:bg-[#1c1c1c] border border-stone-200 dark:border-[#404040] rounded-xl p-6 transition-colors">
-                  {/* Header */}
-                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-4">
-                    <div>
-                      <h3 className="text-xl font-bold text-stone-900 dark:text-[#f0f0f0]">
-                        {exp.title}
-                      </h3>
-                      <p className="text-sm text-indigo-600 dark:text-indigo-400 font-semibold mt-1">
-                        {exp.company}
-                      </p>
-                    </div>
-                    <div className="text-right mt-2 sm:mt-0">
-                      <p className="text-sm text-stone-500 dark:text-stone-500 font-mono">
-                        {exp.period}
-                      </p>
-                      <p className="text-xs text-stone-400 dark:text-stone-500">{exp.employment}</p>
-                    </div>
-                  </div>
-
-                  {/* Description */}
-                  <p className="text-stone-600 dark:text-[#b0b0b0] mb-4 leading-relaxed">
-                    {exp.description}
-                  </p>
-
-                  {/* Tech Tags */}
-                  <div className="flex flex-wrap gap-2">
-                    {exp.tech.map((t) => (
-                      <span
-                        key={t}
-                        className="text-xs px-2.5 py-1 bg-indigo-50 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 rounded-full font-medium transition-colors"
-                      >
-                        {t}
-                      </span>
-                    ))}
-                  </div>
-
-                  {/* Current Badge */}
+              {/* Right: role / description */}
+              <div>
+                <div className="flex flex-wrap items-center gap-3 mb-3">
+                  <h3
+                    className="text-[1.25rem] font-semibold tracking-[-0.02em]"
+                    style={{ fontFamily: "var(--font-space-grotesk)", color: "var(--tx)" }}
+                  >
+                    {exp.title}
+                  </h3>
                   {exp.current && (
-                    <div className="mt-4 inline-flex items-center gap-2 px-3 py-1 bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 text-xs font-semibold rounded-full transition-colors">
-                      <span className="w-2 h-2 bg-green-600 dark:bg-green-400 rounded-full animate-pulse" />
-                      Currently here
-                    </div>
+                    <span
+                      className="px-2.5 py-1 rounded-full text-[0.65rem] tracking-[0.08em] uppercase"
+                      style={{
+                        background: "oklch(66% 0.21 282 / 0.1)",
+                        border: "1px solid oklch(66% 0.21 282 / 0.35)",
+                        color: "var(--ac)",
+                      }}
+                    >
+                      Current
+                    </span>
                   )}
                 </div>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
+                <p
+                  className="text-[0.9375rem] leading-[1.75] mb-4"
+                  style={{ color: "var(--tx2)" }}
+                >
+                  {exp.description}
+                </p>
+                <div className="flex flex-wrap gap-1.5">
+                  {exp.tech.map((t) => (
+                    <span
+                      key={t}
+                      className="px-2.5 py-1 rounded text-[0.72rem]"
+                      style={{
+                        border: "1px solid var(--bd)",
+                        background: "var(--sf2)",
+                        color: "var(--tx2)",
+                      }}
+                    >
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          ))}
+
+          {/* Bottom border */}
+          <div style={{ borderTop: "1px solid var(--bd)" }} />
+        </div>
       </div>
     </section>
   );

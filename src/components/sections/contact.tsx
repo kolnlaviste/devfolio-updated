@@ -2,113 +2,127 @@
 
 import { motion } from "framer-motion";
 import { bioData } from "@/lib/data";
-import { Mail, GitBranch, CheckCircle, Share2 } from "lucide-react";
-import Link from "next/link";
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 20 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.55, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] },
+  }),
+};
 
 export default function Contact() {
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.6 },
-    },
-  };
-
   return (
-    <section id="contact" className="py-20 relative">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6">
-        <motion.div
-          className="text-center"
-          variants={containerVariants}
+    <section
+      id="contact"
+      style={{ background: "var(--sf)", borderTop: "1px solid var(--bd)" }}
+    >
+      <div className="max-w-[720px] mx-auto px-8 py-32 text-center">
+        {/* Label */}
+        <motion.p
+          custom={0}
+          variants={fadeUp}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
+          className="text-[0.68rem] tracking-[0.18em] uppercase font-medium mb-4"
+          style={{ color: "var(--ac)" }}
         >
-          <motion.div variants={itemVariants}>
-            <p className="text-xs tracking-widest uppercase text-stone-500 dark:text-stone-500 font-semibold">
-              Get in Touch
-            </p>
-            <h2 className="text-4xl sm:text-5xl font-black text-stone-900 dark:text-[#f0f0f0] mt-2">
-              Let's Work Together
-            </h2>
-          </motion.div>
+          Get in Touch
+        </motion.p>
 
-          <motion.p
-            variants={itemVariants}
-            className="text-lg text-stone-600 dark:text-[#b0b0b0] mt-6 max-w-xl mx-auto"
-          >
-            Whether you have a project in mind or just want to chat, feel free to reach out. I'm always interested in new opportunities and collaborations.
-          </motion.p>
+        {/* Title */}
+        <motion.h2
+          custom={1}
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="leading-[1.02] tracking-[-0.04em]"
+          style={{
+            fontFamily: "var(--font-space-grotesk)",
+            fontSize: "clamp(2.5rem, 6vw, 4.5rem)",
+            fontWeight: 700,
+            color: "var(--tx)",
+          }}
+        >
+          Let&apos;s Work
+          <br />
+          Together
+        </motion.h2>
 
-          {/* Email CTA */}
-          <motion.div variants={itemVariants} className="mt-12">
+        {/* Sub */}
+        <motion.p
+          custom={2}
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="mt-5 mb-10 text-[1.0625rem] leading-[1.75] max-w-[36ch] mx-auto"
+          style={{ color: "var(--tx2)" }}
+        >
+          Whether you have a project in mind or just want to talk, feel free to reach out.
+        </motion.p>
+
+        {/* Email */}
+        <motion.a
+          custom={3}
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          href={`mailto:${bioData.email}`}
+          className="inline-block text-[1.375rem] mb-10 transition-opacity duration-200 hover:opacity-70"
+          style={{
+            fontFamily: "var(--font-space-grotesk)",
+            color: "var(--ac)",
+            borderBottom: "1px solid oklch(66% 0.21 282 / 0.3)",
+            paddingBottom: "0.25rem",
+          }}
+        >
+          {bioData.email}
+        </motion.a>
+
+        {/* Social buttons */}
+        <motion.div
+          custom={4}
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="flex gap-3 justify-center flex-wrap"
+        >
+          {[
+            { label: "GitHub", href: bioData.github },
+            { label: "LinkedIn", href: bioData.linkedin },
+            { label: "Email", href: `mailto:${bioData.email}` },
+          ].map((s) => (
             <a
-              href={`mailto:${bioData.email}`}
-              className="inline-flex items-center justify-center"
+              key={s.label}
+              href={s.href}
+              target={s.href.startsWith("http") ? "_blank" : undefined}
+              rel={s.href.startsWith("http") ? "noopener noreferrer" : undefined}
+              className="px-6 py-2.5 rounded-lg text-[0.875rem] transition-all duration-200"
+              style={{
+                border: "1px solid var(--bd)",
+                color: "var(--tx2)",
+                fontFamily: "var(--font-dm-sans)",
+              }}
+              onMouseEnter={(e) => {
+                const el = e.currentTarget as HTMLAnchorElement;
+                el.style.borderColor = "var(--ac)";
+                el.style.color = "var(--ac)";
+              }}
+              onMouseLeave={(e) => {
+                const el = e.currentTarget as HTMLAnchorElement;
+                el.style.borderColor = "var(--bd)";
+                el.style.color = "var(--tx2)";
+              }}
             >
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                className="text-2xl sm:text-3xl font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors cursor-pointer"
-              >
-                {bioData.email}
-              </motion.div>
+              {s.label}
             </a>
-          </motion.div>
-
-          {/* Social Links */}
-          <motion.div
-            variants={containerVariants}
-            className="flex justify-center gap-6 mt-12"
-          >
-            <motion.a
-              variants={itemVariants}
-              href={bioData.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              whileHover={{ scale: 1.1 }}
-              className="p-3 bg-stone-100 dark:bg-[#2a2a2a] text-stone-700 dark:text-[#f0f0f0] hover:bg-indigo-600 dark:hover:bg-indigo-500 hover:text-white rounded-full transition-colors"
-            >
-              <GitBranch size={24} />
-            </motion.a>
-            <motion.a
-              variants={itemVariants}
-              href={bioData.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              whileHover={{ scale: 1.1 }}
-              className="p-3 bg-stone-100 dark:bg-[#2a2a2a] text-stone-700 dark:text-[#f0f0f0] hover:bg-indigo-600 dark:hover:bg-indigo-500 hover:text-white rounded-full transition-colors"
-            >
-              <Share2 size={24} />
-            </motion.a>
-            <motion.a
-              variants={itemVariants}
-              href={`mailto:${bioData.email}`}
-              whileHover={{ scale: 1.1 }}
-              className="p-3 bg-stone-100 dark:bg-[#2a2a2a] text-stone-700 dark:text-[#f0f0f0] hover:bg-indigo-600 dark:hover:bg-indigo-500 hover:text-white rounded-full transition-colors"
-            >
-              <Mail size={24} />
-            </motion.a>
-          </motion.div>
-
-          {/* Status Badge */}
-          <motion.div
-            variants={itemVariants}
-            className="mt-12 inline-flex items-center gap-2 px-4 py-2 bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 rounded-full transition-colors"
-          >
-            <CheckCircle size={18} />
-            <span className="font-semibold">{bioData.availability}</span>
-          </motion.div>
+          ))}
         </motion.div>
       </div>
     </section>

@@ -2,118 +2,137 @@
 
 import { motion } from "framer-motion";
 import { bioData } from "@/lib/data";
-import { MapPin, Briefcase, CheckCircle } from "lucide-react";
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 20 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.55, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] },
+  }),
+};
+
+const stats = [
+  { k: "Location", v: bioData.location },
+  { k: "Current Role", v: "Software Engineer — Coolmogo", dot: true },
+  { k: "Status", v: bioData.availability, accent: true },
+  { k: "Focus", v: "Full-stack · AI systems" },
+];
 
 export default function About() {
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.8 },
-    },
-  };
-
   return (
-    <section id="about" className="py-20 relative">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6">
-        <motion.div
-          className="grid md:grid-cols-2 gap-16 items-start"
-          variants={containerVariants}
+    <section id="about" className="relative">
+      <div className="max-w-[1200px] mx-auto px-14 py-28">
+        {/* Header */}
+        <motion.p
+          custom={0}
+          variants={fadeUp}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
+          className="text-[0.68rem] tracking-[0.18em] uppercase font-medium mb-3"
+          style={{ color: "var(--ac)" }}
         >
-          {/* Left - Bio */}
-          <div className="space-y-8">
-            <motion.div variants={itemVariants}>
-              <p className="text-xs tracking-widest uppercase text-stone-500 font-semibold">
-                About
-              </p>
-              <h2 className="text-4xl sm:text-5xl font-black text-stone-900 mt-2">
-                Who I Am
-              </h2>
-            </motion.div>
+          About
+        </motion.p>
+        <motion.h2
+          custom={1}
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="tracking-[-0.025em] leading-[1.1]"
+          style={{
+            fontFamily: "var(--font-space-grotesk)",
+            fontSize: "clamp(2rem, 4vw, 2.75rem)",
+            fontWeight: 600,
+            color: "var(--tx)",
+          }}
+        >
+          Who I Am
+        </motion.h2>
+        <motion.div
+          custom={2}
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="w-12 h-0.5 rounded-full mt-6 mb-14"
+          style={{ background: "var(--ac)" }}
+        />
 
-            <motion.div variants={itemVariants} className="space-y-6">
-              {bioData.bio.map((paragraph, i) => (
-                <p
-                  key={i}
-                  className="text-base sm:text-lg text-stone-600 dark:text-[#b0b0b0] leading-relaxed"
-                >
-                  {paragraph}
-                </p>
-              ))}
-            </motion.div>
-          </div>
-
-          {/* Right - Facts */}
+        {/* Two-column grid */}
+        <div className="grid gap-20 items-start md:grid-cols-[1.4fr_1fr]">
+          {/* Bio */}
           <motion.div
-            variants={containerVariants}
-            className="space-y-6"
+            custom={3}
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="space-y-5"
           >
-            <motion.div
-              variants={itemVariants}
-              className="p-4 bg-white dark:bg-[#1c1c1c] border border-stone-200 dark:border-[#404040] rounded-lg transition-colors"
-            >
-              <div className="flex items-start gap-3">
-                <MapPin className="w-5 h-5 text-indigo-600 dark:text-indigo-400 mt-0.5 flex-shrink-0" />
-                <div>
-                  <p className="text-xs uppercase tracking-wide text-stone-500 dark:text-stone-500 font-semibold">
-                    Location
-                  </p>
-                  <p className="text-stone-900 dark:text-[#f0f0f0] font-medium mt-1">
-                    {bioData.location}
-                  </p>
-                </div>
-              </div>
-            </motion.div>
-
-            <motion.div
-              variants={itemVariants}
-              className="p-4 bg-white dark:bg-[#1c1c1c] border border-stone-200 dark:border-[#404040] rounded-lg transition-colors"
-            >
-              <div className="flex items-start gap-3">
-                <Briefcase className="w-5 h-5 text-indigo-600 dark:text-indigo-400 mt-0.5 flex-shrink-0" />
-                <div>
-                  <p className="text-xs uppercase tracking-wide text-stone-500 dark:text-stone-500 font-semibold">
-                    Current Role
-                  </p>
-                  <p className="text-stone-900 dark:text-[#f0f0f0] font-medium mt-1">
-                    Software Engineer at Coolmogo
-                  </p>
-                </div>
-              </div>
-            </motion.div>
-
-            <motion.div
-              variants={itemVariants}
-              className="p-4 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-700 rounded-lg transition-colors"
-            >
-              <div className="flex items-start gap-3">
-                <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400 mt-0.5 flex-shrink-0" />
-                <div>
-                  <p className="text-xs uppercase tracking-wide text-green-700 dark:text-green-400 font-semibold">
-                    Status
-                  </p>
-                  <p className="text-green-900 dark:text-green-300 font-medium mt-1">
-                    {bioData.availability}
-                  </p>
-                </div>
-              </div>
-            </motion.div>
+            {bioData.bio.map((paragraph, i) => (
+              <p
+                key={i}
+                className="text-[1.0625rem] leading-[1.8]"
+                style={{ color: "var(--tx2)" }}
+              >
+                {paragraph}
+              </p>
+            ))}
           </motion.div>
-        </motion.div>
+
+          {/* Stat cards */}
+          <motion.div
+            custom={4}
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="flex flex-col gap-3"
+          >
+            {stats.map((s) => (
+              <div
+                key={s.k}
+                className="px-5 py-4 rounded-xl transition-all duration-200"
+                style={{
+                  background: "var(--sf)",
+                  border: "1px solid var(--bd)",
+                }}
+                onMouseEnter={(e) =>
+                  ((e.currentTarget as HTMLDivElement).style.borderColor =
+                    "oklch(66% 0.21 282 / 0.45)")
+                }
+                onMouseLeave={(e) =>
+                  ((e.currentTarget as HTMLDivElement).style.borderColor = "var(--bd)")
+                }
+              >
+                <p
+                  className="text-[0.65rem] tracking-[0.12em] uppercase mb-1.5"
+                  style={{ color: "var(--tx3)" }}
+                >
+                  {s.k}
+                </p>
+                <p
+                  className="text-[0.9375rem] font-medium flex items-center gap-2"
+                  style={{
+                    fontFamily: "var(--font-space-grotesk)",
+                    color: s.accent ? "var(--ac)" : "var(--tx)",
+                  }}
+                >
+                  {s.dot && (
+                    <span
+                      className="w-1.5 h-1.5 rounded-full flex-shrink-0"
+                      style={{ background: "var(--ac)" }}
+                    />
+                  )}
+                  {s.v}
+                </p>
+              </div>
+            ))}
+          </motion.div>
+        </div>
       </div>
     </section>
   );
